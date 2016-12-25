@@ -1,2 +1,2 @@
 # SwipePages
-Example swipe pages on tuchscreen.
+Example swipe pages on touchscreen.
