@@ -5,8 +5,54 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SwipePages"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="TabletSlider" ResizeMode="NoResize" WindowState="Maximized"  WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <XmlDataProvider x:Key="views">
+            <x:XData>
+                <Views xmlns="">
+                    <View Title="View1">
+                        <Page Source="Page1.xaml"/>
+                    </View>
+                    <View Title="View2">
+                        <Page Source="Page2.xaml"/>
+                    </View>
+                </Views>
+            </x:XData>
+        </XmlDataProvider>
+        <CollectionViewSource x:Key="ViewSource" Source="{Binding Source={StaticResource views},  XPath=Views/View}"/>
+        <Storyboard x:Key="slideLeftToRight" TargetProperty="RenderTransform.(TranslateTransform.X)" AccelerationRatio=".4" DecelerationRatio=".4">
+            <DoubleAnimation Storyboard.TargetName="viewer" Duration="0:0:0.6" From="1028" To="0" />
+            <DoubleAnimation Storyboard.TargetName="bordervisual" Duration="0:0:0.6" From="0" To="-1028" />
+        </Storyboard>
+        <Storyboard x:Key="slideRightToLeft" TargetProperty="RenderTransform.(TranslateTransform.X)" AccelerationRatio=".4" DecelerationRatio=".4">
+            <DoubleAnimation Storyboard.TargetName="viewer" Duration="0:0:0.6" From="-1028" To="0" />
+            <DoubleAnimation Storyboard.TargetName="bordervisual" Duration="0:0:0.6" From="0" To="1028" />
+        </Storyboard>
+        <VisualBrush x:Key="VisualBrush1" Visual="{Binding ElementName=viewer}" />
+        <!-- Style for Add Batch Button -->
+    </Window.Resources>
+
     <Grid>
-        
+        <StackPanel>
+            <Grid Name="ViewGrid">
+                <Border x:Name="bordervisual">
+                    <Rectangle x:Name="rectanglevisual" />
+                    <Border.RenderTransform>
+                        <TranslateTransform />
+                    </Border.RenderTransform>
+                </Border>
+                <ItemsControl x:Name="viewer" DataContext="{StaticResource ViewSource}" ItemsSource="{Binding XPath=Page}" Margin="0,0,0,1">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Frame x:Name="frame" Source="{Binding XPath=@Source}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.RenderTransform>
+                        <TranslateTransform />
+                    </ItemsControl.RenderTransform>
+                </ItemsControl>
+            </Grid>
+        </StackPanel>
     </Grid>
 </Window>
